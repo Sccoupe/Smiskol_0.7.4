@@ -133,6 +133,7 @@ class CarState(CarStateBase):
       ("LKA_STATE", "EPS_STATUS", 0),
       ("BRAKE_LIGHTS_ACC", "ESP_CONTROL", 0),
       ("AUTO_HIGH_BEAM", "LIGHT_STALK", 0),
+      ("ZORRO_STEER", "SECONDARY_STEER_ANGLE", 0),
     ]
 
     checks = [
