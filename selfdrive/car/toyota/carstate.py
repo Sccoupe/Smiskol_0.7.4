@@ -60,7 +60,8 @@ class CarState(CarStateBase):
           self.needs_angle_offset = False
           self.angle_offset = ret.steeringAngle - angle_wheel
     else:
-      ret.steeringAngle = cp.vl["STEER_ANGLE_SENSOR"]['STEER_ANGLE'] + cp.vl["STEER_ANGLE_SENSOR"]['STEER_FRACTION']
+      #ret.steeringAngle = cp.vl["STEER_ANGLE_SENSOR"]['STEER_ANGLE'] + cp.vl["STEER_ANGLE_SENSOR"]['STEER_FRACTION']
+      ret.steeringAngle = cp.vl["SECONDARY_STEER_ANGLE"]['ZORRO_STEER'] - self.angle_offset
 
     ret.steeringRate = cp.vl["STEER_ANGLE_SENSOR"]['STEER_RATE']
     can_gear = int(cp.vl["GEAR_PACKET"]['GEAR'])
@@ -158,6 +159,9 @@ class CarState(CarStateBase):
 
     if CP.carFingerprint == CAR.PRIUS:
       signals += [("STATE", "AUTOPARK_STATUS", 0)]
+      
+    if CP.carFingerprint == CAR.COROLLA:
+      signals += [("ZORRO_STEER", "SECONDARY_STEER_ANGLE", 0)]
 
     # add gas interceptor reading if we are using it
     if CP.enableGasInterceptor:
