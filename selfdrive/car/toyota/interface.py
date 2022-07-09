@@ -2,7 +2,7 @@
 from cereal import car
 from selfdrive.config import Conversions as CV
 from selfdrive.controls.lib.drive_helpers import EventTypes as ET, create_event
-from selfdrive.car.toyota.values import Ecu, ECU_FINGERPRINT, CAR, TSS2_CAR, FINGERPRINTS
+from selfdrive.car.toyota.values import Ecu, ECU_FINGERPRINT, CAR, TSS2_CAR, FINGERPRINTS, RADAR_ACC_CAR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, is_ecu_disconnected, gen_empty_fingerprint
 from selfdrive.swaglog import cloudlog
 from selfdrive.car.interfaces import CarInterfaceBase
@@ -259,6 +259,9 @@ class CarInterface(CarInterfaceBase):
 
     ret.steerRateCost = 1.
     ret.centerToFront = ret.wheelbase * 0.44
+    
+    # if the smartDSU is detected, openpilot can send ACC_CMD (and the smartDSU will block it from the DSU) or not (the DSU is "connected")
+    ret.openpilotLongitudinalControl = smartDsu or ret.enableDsu or candidate in (TSS2_CAR - RADAR_ACC_CAR)
 
     # TODO: get actual value, for now starting with reasonable value for
     # civic and scaling by mass and wheelbase
