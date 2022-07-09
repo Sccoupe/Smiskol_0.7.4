@@ -601,35 +601,23 @@ FW_VERSIONS = {
     ],
   },
   CAR.RAV4: {
-    (Ecu.engine, 0x7e0, None): [
-      b'\x02342Q1000\x00\x00\x00\x00\x00\x00\x00\x0054212000\x00\x00\x00\x00\x00\x00\x00\x00',
-      b'\x02342Q1100\x00\x00\x00\x00\x00\x00\x00\x0054212000\x00\x00\x00\x00\x00\x00\x00\x00',
-      b'\x02342Q1300\x00\x00\x00\x00\x00\x00\x00\x0054212000\x00\x00\x00\x00\x00\x00\x00\x00',
-      b'\x02342Q2000\x00\x00\x00\x00\x00\x00\x00\x0054213000\x00\x00\x00\x00\x00\x00\x00\x00',
-      b'\x02342Q2100\x00\x00\x00\x00\x00\x00\x00\x0054213000\x00\x00\x00\x00\x00\x00\x00\x00',
+    (Ecu.esp, 0x7b0, None): [
+      b'\x01F15260R350\x00\x00\x00\x00\x00\x00',
+      b'\x01F15260R361\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.eps, 0x7a1, None): [
-      b'8965B42082\x00\x00\x00\x00\x00\x00',
-      b'8965B42083\x00\x00\x00\x00\x00\x00',
+      b'\x028965B0R01500\x00\x00\x00\x008965B0R02500\x00\x00\x00\x00',
     ],
-    (Ecu.esp, 0x7b0, None): [
-      b'F15260R102\x00\x00\x00\x00\x00\x00',
-      b'F15260R103\x00\x00\x00\x00\x00\x00',
-      b'F152642493\x00\x00\x00\x00\x00\x00',
-    ],
-    (Ecu.dsu, 0x791, None): [
-      b'881514201300\x00\x00\x00\x00',
-      b'881514201400\x00\x00\x00\x00',
+    (Ecu.engine, 0x700, None): [
+      b'\x01896634AA0000\x00\x00\x00\x00',
+      b'\x01896634AA1000\x00\x00\x00\x00',
+      b'\x01896634A88000\x00\x00\x00\x00',
     ],
     (Ecu.fwdRadar, 0x750, 0xf): [
-      b'8821F4702000\x00\x00\x00\x00',
-      b'8821F4702100\x00\x00\x00\x00',
-      b'8821F4702300\x00\x00\x00\x00',
+      b'\x018821F0R01100\x00\x00\x00\x00',
     ],
     (Ecu.fwdCamera, 0x750, 0x6d): [
-      b'8646F4201200\x00\x00\x00\x00',
-      b'8646F4202001\x00\x00\x00\x00',
-      b'8646F4202100\x00\x00\x00\x00',
+      b'\x028646F0R02100\x00\x00\x00\x008646G0R01100\x00\x00\x00\x00',
     ],
   },
   CAR.RAV4H: {
@@ -833,7 +821,7 @@ DBC = {
   CAR.HIGHLANDER_TSS2: dbc_dict('toyota_nodsu_pt_generated', 'toyota_tss2_adas'),
   CAR.HIGHLANDERH: dbc_dict('toyota_highlander_hybrid_2018_pt_generated', 'toyota_adas'),
   CAR.AVALON: dbc_dict('toyota_avalon_2017_pt_generated', 'toyota_adas'),
-  CAR.RAV4_TSS2: dbc_dict('toyota_nodsu_pt_generated', 'toyota_tss2_adas'),
+  CAR.RAV4_TSS2: dbc_dict('toyota_nodsu_pt_generated', None),
   CAR.COROLLA_TSS2: dbc_dict('toyota_nodsu_pt_generated', 'toyota_tss2_adas'),
   CAR.COROLLAH_TSS2: dbc_dict('toyota_nodsu_hybrid_pt_generated', 'toyota_tss2_adas'),
   CAR.LEXUS_ES_TSS2: dbc_dict('toyota_nodsu_pt_generated', 'toyota_tss2_adas'),
@@ -848,3 +836,6 @@ DBC = {
 NO_DSU_CAR = [CAR.CHR, CAR.CHRH, CAR.CAMRY, CAR.CAMRYH, CAR.RAV4_TSS2, CAR.COROLLA_TSS2, CAR.COROLLAH_TSS2, CAR.LEXUS_ES_TSS2, CAR.LEXUS_ESH_TSS2, CAR.RAV4H_TSS2, CAR.LEXUS_RX_TSS2, CAR.HIGHLANDER_TSS2]
 TSS2_CAR = [CAR.RAV4_TSS2, CAR.COROLLA_TSS2, CAR.COROLLAH_TSS2, CAR.LEXUS_ES_TSS2, CAR.LEXUS_ESH_TSS2, CAR.RAV4H_TSS2, CAR.LEXUS_RX_TSS2, CAR.HIGHLANDER_TSS2]
 NO_STOP_TIMER_CAR = [CAR.RAV4H, CAR.HIGHLANDERH, CAR.HIGHLANDER, CAR.RAV4_TSS2, CAR.COROLLA_TSS2, CAR.COROLLAH_TSS2, CAR.LEXUS_ES_TSS2, CAR.LEXUS_ESH_TSS2, CAR.SIENNA, CAR.RAV4H_TSS2, CAR.LEXUS_RX_TSS2, CAR.HIGHLANDER_TSS2]  # no resume button press required
+
+# these cars have a radar which sends ACC messages instead of the camera
+RADAR_ACC_CAR = {CAR.RAV4_TSS2}
