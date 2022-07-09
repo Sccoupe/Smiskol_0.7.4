@@ -4,7 +4,7 @@ from opendbc.can.can_define import CANDefine
 from selfdrive.car.interfaces import CarStateBase
 from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
-from selfdrive.car.toyota.values import CAR, DBC, STEER_THRESHOLD, TSS2_CAR, NO_STOP_TIMER_CAR
+from selfdrive.car.toyota.values import CAR, DBC, STEER_THRESHOLD, TSS2_CAR, NO_STOP_TIMER_CAR, RADAR_ACC_CAR
 
 
 class CarState(CarStateBase):
@@ -72,6 +72,13 @@ class CarState(CarStateBase):
     ret.steeringTorqueEps = cp.vl["STEER_TORQUE_SENSOR"]['STEER_TORQUE_EPS']
     # we could use the override bit from dbc, but it's triggered at too high torque values
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
+    
+    if self.CP.carFingerprint in RADAR_ACC_CAR:
+      self.acc_type = cp.vl["ACC_CONTROL"]["ACC_TYPE"]
+      ret.stockFcw = bool(cp.vl["ACC_HUD"]["FCW"])
+    elif self.CP.carFingerprint in TSS2_CAR:
+      self.acc_type = cp_cam.vl["ACC_CONTROL"]["ACC_TYPE"]
+      ret.stockFcw = bool(cp_cam.vl["ACC_HUD"]["FCW"])
 
     if self.CP.carFingerprint == CAR.LEXUS_IS:
       ret.cruiseState.available = cp.vl["DSU_CRUISE"]['MAIN_ON'] != 0
@@ -155,6 +162,16 @@ class CarState(CarStateBase):
       signals.append(("LOW_SPEED_LOCKOUT", "PCM_CRUISE_2", 0))
       checks.append(("PCM_CRUISE_2", 33))
 
+    if CP.carFingerprint in RADAR_ACC_CAR:
+      signals += [
+        ("ACC_TYPE", "ACC_CONTROL"),
+        ("FCW", "ACC_HUD"),
+      ]
+      checks += [
+        ("ACC_CONTROL", 33),
+        ("ACC_HUD", 1),
+      ]
+      
 
     if CP.carFingerprint == CAR.PRIUS:
       signals += [("STATE", "AUTOPARK_STATUS", 0)]
@@ -174,5 +191,15 @@ class CarState(CarStateBase):
 
     # use steering message to check if panda is connected to frc
     checks = [("STEERING_LKA", 42)]
+    
+    if CP.carFingerprint in (TSS2_CAR - RADAR_ACC_CAR):
+      signals += [
+        ("ACC_TYPE", "ACC_CONTROL"),
+        ("FCW", "ACC_HUD"),
+      ]
+      checks += [
+        ("ACC_CONTROL", 33),
+        ("ACC_HUD", 1),
+      ]
 
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
